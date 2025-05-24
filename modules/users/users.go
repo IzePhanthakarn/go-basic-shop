@@ -61,3 +61,21 @@ type UserToken struct {
 	AccessToken  string `db:"access_token" json:"access_token"`
 	RefreshToken string `db:"refresh_token" json:"refresh_token"`
 }
+
+type UserClaims struct {
+	Id string `db:"id" json:"id"`
+	RoleId int `db:"role" json:"role"`
+}
+
+type UserRefreshCredential struct {
+	RefreshToken string `json:"refresh_token" form:"refresh_token"`
+}
+
+type Oauth struct {
+	Id string `db:"id" json:"id"`
+	UserId string `db:"user_id" json:"user_id"`
+}
+
+type UserRemoveCredential struct {
+	OauthId string `json:"oauth_id" form:"oauth_id"`
+}
