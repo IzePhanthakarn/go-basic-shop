@@ -20,6 +20,7 @@ const (
 	jwtAuthErr     middlewareHandlersErrCode = "middleware-002"
 	paramsCheckErr middlewareHandlersErrCode = "middleware-003"
 	authorizeError middlewareHandlersErrCode = "middleware-004"
+	apiKeyAuthErr  middlewareHandlersErrCode = "middleware-005"
 )
 
 type IMiddlewaresHandler interface {
@@ -29,6 +30,7 @@ type IMiddlewaresHandler interface {
 	JwtAuth() fiber.Handler
 	ParamsCheck() fiber.Handler
 	Authorize(expectRoleId ...int) fiber.Handler
+	ApiKeyAuth() fiber.Handler
 }
 
 type middlewaresHandler struct {
@@ -137,7 +139,7 @@ func (h *middlewaresHandler) Authorize(expectRoleId ...int) fiber.Handler {
 		}
 
 		sum := 0
-		for _,v := range expectRoleId {
+		for _, v := range expectRoleId {
 			sum += v
 		}
 
@@ -155,5 +157,19 @@ func (h *middlewaresHandler) Authorize(expectRoleId ...int) fiber.Handler {
 			string(authorizeError),
 			"unauthorized",
 		).Res()
+	}
+}
+
+func (h *middlewaresHandler) ApiKeyAuth() fiber.Handler {
+	return func(c fiber.Ctx) error {
+		key := c.Get("x-api-key")
+		if _, err := kawaiiauth.ParseApiKey(h.cfg.Jwt(), key); err != nil {
+			return entities.NewResponse(c).Error(
+				fiber.StatusUnauthorized,
+				string(apiKeyAuthErr),
+				"invalid api key",
+			).Res()
+		}
+		return c.Next()
 	}
 }

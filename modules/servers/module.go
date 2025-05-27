@@ -1,6 +1,9 @@
 package servers
 
 import (
+	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoHandlers"
+	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoRepositories"
+	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoUsecases"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresUsecases"
@@ -14,6 +17,7 @@ import (
 type IModuleFactory interface {
 	MonitorModule()
 	UserModule()
+	AppinfoModule()
 }
 
 type moduleFactory struct {
@@ -49,12 +53,22 @@ func (m *moduleFactory) UserModule() {
 
 	router := m.router.Group("/users")
 
-	router.Post("/signup", handler.SignUpCustomer)
-	router.Post("/signin", handler.SignIn)
-	router.Post("/refresh", handler.RefreshPassport)
-	router.Post("/signout", handler.SignOut)
-	router.Post("/signup-admin", handler.SignUpAdmin)
+	router.Post("/signup", handler.SignUpCustomer, m.middlewares.ApiKeyAuth())
+	router.Post("/signin", handler.SignIn, m.middlewares.ApiKeyAuth())
+	router.Post("/refresh", handler.RefreshPassport, m.middlewares.ApiKeyAuth())
+	router.Post("/signout", handler.SignOut, m.middlewares.ApiKeyAuth())
+	router.Post("/signup-admin", handler.SignUpAdmin, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
 
 	router.Get("/:user_id", handler.GetUserProfile, m.middlewares.JwtAuth(), m.middlewares.ParamsCheck())
 	router.Get("/admin/secret", handler.GenerateAdminToken, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
+}
+
+func (m *moduleFactory) AppinfoModule() {
+	repository := appinfoRepositories.AppinfoRepository(m.server.db)
+	usecase := appinfoUsecases.AppinfoUsecase(repository)
+	handler := appinfoHandlers.AppinfoHandler(m.server.cfg, usecase)
+
+	router := m.router.Group("/appinfo")
+
+	router.Get("/apikey", handler.GenerateApiKey, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
 }
