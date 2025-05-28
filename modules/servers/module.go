@@ -4,6 +4,8 @@ import (
 	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoUsecases"
+	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesHandlers"
+	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesUsecases"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresUsecases"
@@ -18,6 +20,7 @@ type IModuleFactory interface {
 	MonitorModule()
 	UserModule()
 	AppinfoModule()
+	FileModule()
 }
 
 type moduleFactory struct {
@@ -30,7 +33,8 @@ func InitModule(router fiber.Router, server *server, middlewares middlewaresHand
 	return &moduleFactory{
 		router:      router,
 		server:      server,
-		middlewares: middlewares}
+		middlewares: middlewares,
+	}
 }
 
 func InitMiddlewares(s *server) middlewaresHandlers.IMiddlewaresHandler {
@@ -75,4 +79,13 @@ func (m *moduleFactory) AppinfoModule() {
 
 	router.Get("/categories", handler.FindCategory)
 	router.Get("/apikey", handler.GenerateApiKey, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
+}
+
+func (m *moduleFactory) FileModule() {
+	usecase := filesUsecases.FileUsecase(m.server.cfg)
+	handler := filesHandlers.FilesHandler(m.server.cfg, usecase)
+	router := m.router.Group("/files")
+
+	router.Post("/upload", handler.UploadFile, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
+	router.Patch("/delete", handler.DeleteFile, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
 }
