@@ -43,7 +43,7 @@ func (r *Response) Error(code int, traceId, msg string) IResponse {
 		TraceId: traceId,
 		Msg:     msg,
 	}
-	
+
 	r.IsError = true
 	kawaiilogger.InitKawaiiLogger(r.Context, &r.ErrorRes).Print().Save()
 	return r
@@ -56,4 +56,12 @@ func (r *Response) Res() error {
 		}
 		return &r.Data
 	}())
+}
+
+type PaginateRes struct {
+	Data      any `json:"data"`
+	Page      int `json:"page"`
+	Limit     int `json:"limit"`
+	TotalPage int `json:"total_page"`
+	TotalItem int `json:"total_item"`
 }

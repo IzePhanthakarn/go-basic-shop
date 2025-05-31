@@ -10,6 +10,9 @@ import (
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresUsecases"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/monitor/monitorHandlers"
+	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsHandlers"
+	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsRepositories"
+	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsUsecases"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/users/usersHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/users/usersRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/users/usersUsecases"
@@ -21,6 +24,7 @@ type IModuleFactory interface {
 	UserModule()
 	AppinfoModule()
 	FileModule()
+	ProductsModule()
 }
 
 type moduleFactory struct {
@@ -88,4 +92,23 @@ func (m *moduleFactory) FileModule() {
 
 	router.Post("/upload", handler.UploadFile, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
 	router.Patch("/delete", handler.DeleteFile, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
+}
+
+func (m *moduleFactory) ProductsModule() {
+	filesUsecase := filesUsecases.FileUsecase(m.server.cfg)
+	// handler := filesHandlers.FilesHandler(m.server.cfg, filesUsecase)
+
+	productsRepository := productsRepositories.ProductsRepository(m.server.db, m.server.cfg, filesUsecase)
+	productsUsecase := productsUsecases.ProductsUsecase(productsRepository)
+	productsHandler := productsHandlers.ProductsHandler(m.server.cfg, filesUsecase, productsUsecase)
+
+	router := m.router.Group("/products")
+
+	router.Get("/", productsHandler.FindProduct, m.middlewares.ApiKeyAuth())
+	router.Get("/:product_id", productsHandler.FindOneProduct, m.middlewares.ApiKeyAuth())
+	
+	router.Post("/", productsHandler.AddProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
+	router.Patch("/:product_id", productsHandler.UpdateProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
+	
+	router.Delete("/:product_id", productsHandler.DeleteProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
 }

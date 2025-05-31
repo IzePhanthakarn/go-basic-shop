@@ -10,7 +10,7 @@ type FileReq struct {
 }
 
 type FileRes struct {
-	FileName string `json:"file_name"`
+	FileName string `json:"filename"`
 	Url      string `json:"url"`
 }
 
