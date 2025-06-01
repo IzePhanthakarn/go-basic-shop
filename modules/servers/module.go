@@ -10,6 +10,9 @@ import (
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresUsecases"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/monitor/monitorHandlers"
+	"github.com/IzePhanthakarn/kawaii-shop/modules/orders/ordersHandlers"
+	"github.com/IzePhanthakarn/kawaii-shop/modules/orders/ordersRepositories"
+	"github.com/IzePhanthakarn/kawaii-shop/modules/orders/ordersUsecases"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsUsecases"
@@ -25,6 +28,7 @@ type IModuleFactory interface {
 	AppinfoModule()
 	FileModule()
 	ProductsModule()
+	OrderModule()
 }
 
 type moduleFactory struct {
@@ -96,7 +100,6 @@ func (m *moduleFactory) FileModule() {
 
 func (m *moduleFactory) ProductsModule() {
 	filesUsecase := filesUsecases.FileUsecase(m.server.cfg)
-	// handler := filesHandlers.FilesHandler(m.server.cfg, filesUsecase)
 
 	productsRepository := productsRepositories.ProductsRepository(m.server.db, m.server.cfg, filesUsecase)
 	productsUsecase := productsUsecases.ProductsUsecase(productsRepository)
@@ -106,9 +109,25 @@ func (m *moduleFactory) ProductsModule() {
 
 	router.Get("/", productsHandler.FindProduct, m.middlewares.ApiKeyAuth())
 	router.Get("/:product_id", productsHandler.FindOneProduct, m.middlewares.ApiKeyAuth())
-	
+
 	router.Post("/", productsHandler.AddProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
 	router.Patch("/:product_id", productsHandler.UpdateProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
-	
+
 	router.Delete("/:product_id", productsHandler.DeleteProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
+}
+
+func (m *moduleFactory) OrderModule() {
+	filesUsecase := filesUsecases.FileUsecase(m.server.cfg)
+	productsRepository := productsRepositories.ProductsRepository(m.server.db, m.server.cfg, filesUsecase)
+
+	ordersRepository := ordersRepositories.OrdersRepository(m.server.db)
+	ordersUsecase := ordersUsecases.OrderUsecase(ordersRepository, productsRepository)
+	ordersHandler := ordersHandlers.OrdersHandlers(m.server.cfg, ordersUsecase)
+
+	router := m.router.Group("/orders")
+
+	router.Get("/", ordersHandler.FindOrder, m.middlewares.JwtAuth())
+	router.Get("/:user_id/:order_id", ordersHandler.FindOneOrder, m.middlewares.JwtAuth(), m.middlewares.ParamsCheck())
+
+	router.Post("/", ordersHandler.InsertOrder, m.middlewares.JwtAuth())
 }

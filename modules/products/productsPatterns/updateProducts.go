@@ -204,10 +204,7 @@ func (b *updateProductBuilder) deleteOldImages() error {
 			})
 		}
 
-		if err := b.filesUsecases.DeleteFile(deleteFileReq); err != nil {
-			b.tx.Rollback()
-			return fmt.Errorf("failed to delete old images: %w", err)
-		}
+		b.filesUsecases.DeleteFile(deleteFileReq)
 	}
 
 	if _, err := b.tx.ExecContext(
