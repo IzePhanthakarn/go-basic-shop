@@ -13,6 +13,7 @@ import (
 
 type Iserver interface {
 	Start()
+	GetServer() *server
 }
 
 type server struct {
@@ -34,6 +35,10 @@ func NewServer(cfg config.IConfig, db *sqlx.DB) Iserver {
 			JSONDecoder:  json.Unmarshal,
 		}),
 	}
+}
+
+func (s *server) GetServer() *server {
+	return s
 }
 
 func (s *server) Start() {
