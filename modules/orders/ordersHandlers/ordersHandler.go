@@ -40,6 +40,16 @@ func OrdersHandlers(cfg config.IConfig, orderUsecase ordersUsecases.IOrdersUseca
 	}
 }
 
+// @Summary Find One Order
+// @Description Find One Order
+// @Tags Orders
+// @Accept  json
+// @Produce  json
+// @Param user_id path string true "User ID"
+// @Param order_id path string true "Order ID"
+// @Security BearerAuth
+// @Success 200 {object} orders.Order
+// @Router /orders/{user_id}/{order_id} [get]
 func (h *ordersHandlers) FindOneOrder(c fiber.Ctx) error {
 	orderId := strings.Trim(c.Params("order_id"), " ")
 
@@ -55,6 +65,22 @@ func (h *ordersHandlers) FindOneOrder(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusOK, order).Res()
 }
 
+// @Summary Find Orders
+// @Description Find Orders
+// @Tags Orders
+// @Accept  json
+// @Produce  json
+// @Param page query int false "Page" default(1)
+// @Param limit query int false "Limit" default(10)
+// @Param order_by query string false "Order By field" default(id)
+// @Param sort_by query string false "Sort By direction (asc or desc)" default(desc)
+// @Param search query string false "Search by user_id | address | contact"
+// @Param status query string false "Status"
+// @Param start_date query string false "Start Date (YYYY-MM-DD)"
+// @Param end_date query string false "End Date (YYYY-MM-DD)"
+// @Security BearerAuth
+// @Success 200 {object} entities.PaginateRes
+// @Router /orders [get]
 func (h *ordersHandlers) FindOrder(c fiber.Ctx) error {
 	req := &orders.OrderFilter{
 		SortReq:       &entities.SortReq{},
@@ -123,6 +149,15 @@ func (h *ordersHandlers) FindOrder(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusOK, orders).Res()
 }
 
+// @Summary Insert Order
+// @Description Insert Order
+// @Tags Orders
+// @Accept  json
+// @Produce  json
+// @Security BearerAuth
+// @Param request body orders.OrderReq true "Order Request"
+// @Success 200 {array} orders.Order
+// @Router /orders [post]
 func (h *ordersHandlers) InsertOrder(c fiber.Ctx) error {
 	userId := strings.Trim(c.Locals("userId").(string), " ")
 
@@ -165,6 +200,17 @@ func (h *ordersHandlers) InsertOrder(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusOK, order).Res()
 }
 
+// @Summary Update Order
+// @Description Update Order
+// @Tags Orders
+// @Accept  json
+// @Produce  json
+// @Security BearerAuth
+// @Param user_id query string false "User ID"
+// @Param order_id query string false "Order ID"
+// @Param request body orders.OrderReq true "Order Request"
+// @Success 200 {array} orders.Order
+// @Router /orders/{user_id}/{order_id} [patch]
 func (h *ordersHandlers) UpdateOrder(c fiber.Ctx) error {
 	orderId := strings.Trim(c.Params("order_id"), " ")
 	req := new(orders.Order)

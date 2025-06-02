@@ -6,7 +6,19 @@ import (
 	"github.com/IzePhanthakarn/kawaii-shop/config"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/servers"
 	"github.com/IzePhanthakarn/kawaii-shop/pkg/databases"
+
+	_ "github.com/IzePhanthakarn/kawaii-shop/docs"
 )
+
+// @title Swagger Kawaii Shop API 1.0
+// @version 1.0.0
+// @description This is a sample swagger for Kawaii Shop 
+// @host localhost:3000
+// @BasePath /v1
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and your JWT token.
 
 func envPath() string {
 	if len(os.Args) == 1 {

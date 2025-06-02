@@ -46,6 +46,14 @@ func ProductsHandler(cfg config.IConfig, filesUsecase filesUsecases.IFilesUsecas
 	}
 }
 
+// @Summary Find One Product
+// @Description Find One Product
+// @Tags Products
+// @Accept  json
+// @Produce  json
+// @Param product_id path string true "Product ID"
+// @Success 200 {object} products.Product
+// @Router /products/{product_id} [get]
 func (h *productsHandler) FindOneProduct(c fiber.Ctx) error {
 	productId := strings.Trim(c.Params("product_id"), " ")
 
@@ -61,6 +69,19 @@ func (h *productsHandler) FindOneProduct(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusOK, product).Res()
 }
 
+// @Summary Find Products
+// @Description Find Products
+// @Tags Products
+// @Accept  json
+// @Produce  json
+// @Param id query string false "Id"
+// @Param page query int false "Page" default(1)
+// @Param limit query int false "Limit" default(10)
+// @Param order_by query string false "Order By field" default(id)
+// @Param sort_by query string false "Sort By direction (asc or desc)" default(desc)
+// @Param search query string false "Search by title | description"
+// @Success 200 {object} entities.PaginateRes
+// @Router /products [get]
 func (h *productsHandler) FindProduct(c fiber.Ctx) error {
 	req := &products.ProductFilter{
 		PaginationReq: &entities.PaginationReq{},
@@ -96,6 +117,15 @@ func (h *productsHandler) FindProduct(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusOK, products).Res()
 }
 
+// @Summary Add Product
+// @Description Add Product
+// @Tags Products
+// @Accept  json
+// @Produce  json
+// @Security BearerAuth
+// @Param request body products.Product true "Product Request"
+// @Success 200 {array} products.Product
+// @Router /products [post]
 func (h *productsHandler) AddProduct(c fiber.Ctx) error {
 	req := &products.Product{
 		Category: &appinfo.Category{},
@@ -130,6 +160,15 @@ func (h *productsHandler) AddProduct(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusCreated, product).Res()
 }
 
+// @Summary Update Product
+// @Description Update Product
+// @Tags Products
+// @Accept  json
+// @Produce  json
+// @Security BearerAuth
+// @Param request body products.Product true "Product Request"
+// @Success 200 {array} products.Product
+// @Router /products [patch]
 func (h *productsHandler) UpdateProduct(c fiber.Ctx) error {
 	productId := strings.Trim(c.Params("product_id"), " ")
 
@@ -159,6 +198,15 @@ func (h *productsHandler) UpdateProduct(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusOK, product).Res()
 }
 
+// @Summary Delete Product
+// @Description Delete Product
+// @Tags Products
+// @Accept  json
+// @Produce  json
+// @Security BearerAuth
+// @Param product_id query string false "Product ID"
+// @Success 200 {array} nil
+// @Router /products/{product_id} [delete]
 func (h *productsHandler) DeleteProduct(c fiber.Ctx) error {
 	productId := strings.Trim(c.Params("product_id"), " ")
 

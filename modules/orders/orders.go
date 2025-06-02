@@ -27,6 +27,14 @@ type Order struct {
 	UpdatedAt    string           `db:"updated_at" json:"updated_at"`
 }
 
+type OrderReq struct {
+	Products     []*ProductsOrder  `json:"products"`
+	Address      string            `json:"address"`
+	Contact      string            `json:"contact"`
+	Status       string            `json:"status"`
+	TransferSlip *TransferSlip     `json:"transfer_slip"`
+}
+
 type TransferSlip struct {
 	Id        string `json:"id"`
 	Filename  string `json:"filename"`

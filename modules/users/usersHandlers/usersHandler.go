@@ -45,6 +45,14 @@ func UsersHandler(cfg config.IConfig, usersUsecase usersUsecases.IUsersUsecase) 
 	}
 }
 
+// @Summary Customer sign up
+// @Description Customer sign up
+// @Tags Users
+// @Accept  json
+// @Produce  json
+// @Param request body users.UserRegisterReq true "User Register Req"
+// @Success 200 {array} users.UserPassport
+// @Router /users/signup [post]
 func (h *userHandler) SignUpCustomer(c fiber.Ctx) error {
 	// Request body parser
 	req := new(users.UserRegisterReq)
@@ -94,6 +102,14 @@ func (h *userHandler) SignUpCustomer(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusCreated, result).Res()
 }
 
+// @Summary Admin sign up
+// @Description Admin sign up
+// @Tags Users
+// @Accept  json
+// @Produce  json
+// @Param request body users.UserRegisterReq true "User Register Req"
+// @Success 200 {array} users.UserPassport
+// @Router /users/signup-admin [post]
 func (h *userHandler) SignUpAdmin(c fiber.Ctx) error {
 	// Request body parser
 	req := new(users.UserRegisterReq)
@@ -143,6 +159,14 @@ func (h *userHandler) SignUpAdmin(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusCreated, result).Res()
 }
 
+// @Summary Generate admin token
+// @Description Generate admin token
+// @Tags Users
+// @Accept  json
+// @Produce  json
+// @Security BearerAuth
+// @Success 200 {array} users.AdminTokenResponse
+// @Router /users/admin/secret [get]
 func (h *userHandler) GenerateAdminToken(c fiber.Ctx) error {
 	adminToken, err := kawaiiauth.NewKawaiiAuth(
 		kawaiiauth.Admin,
@@ -166,6 +190,14 @@ func (h *userHandler) GenerateAdminToken(c fiber.Ctx) error {
 		}).Res()
 }
 
+// @Summary Customer sign in
+// @Description Customer sign in
+// @Tags Users
+// @Accept  json
+// @Produce  json
+// @Param request body users.UserCredential true "User Credential"
+// @Success 200 {array} users.UserPassport
+// @Router /users/signin [post]
 func (h *userHandler) SignIn(c fiber.Ctx) error {
 	req := new(users.UserCredential)
 	if err := c.Bind().Body(req); err != nil {
@@ -187,6 +219,14 @@ func (h *userHandler) SignIn(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusOK, passport).Res()
 }
 
+// @Summary Refresh customer token
+// @Description Refresh customer token
+// @Tags Users
+// @Accept  json
+// @Produce  json
+// @Param request body users.UserRefreshCredential true "User Refresh Credential"
+// @Success 200 {array} users.UserPassport
+// @Router /users/refresh [post]
 func (h *userHandler) RefreshPassport(c fiber.Ctx) error {
 	req := new(users.UserRefreshCredential)
 	if err := c.Bind().Body(req); err != nil {
@@ -208,6 +248,14 @@ func (h *userHandler) RefreshPassport(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusOK, passport).Res()
 }
 
+// @Summary Sign out
+// @Description Sign out
+// @Tags Users
+// @Accept  json
+// @Produce  json
+// @Param request body users.UserRemoveCredential true "User Remove Credential"
+// @Success 200 {array} nil
+// @Router /users/signout [post]
 func (h *userHandler) SignOut(c fiber.Ctx) error {
 	req := new(users.UserRemoveCredential)
 	if err := c.Bind().Body(req); err != nil {
@@ -228,6 +276,15 @@ func (h *userHandler) SignOut(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusOK, nil).Res()
 }
 
+// @Summary Get user profile
+// @Description Get user profile
+// @Tags Users
+// @Accept  json
+// @Produce  json
+// @Param user_id path string true "User ID"
+// @Security BearerAuth
+// @Success 200 {array} users.User
+// @Router /users/{user_id} [get]
 func (h *userHandler) GetUserProfile(c fiber.Ctx) error {
 	userId := strings.Trim(c.Params("user_id"), " ")
 

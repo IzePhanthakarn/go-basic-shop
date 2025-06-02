@@ -38,6 +38,17 @@ func FilesHandler(cfg config.IConfig, filesUsecases filesUsecases.IFilesUsecase)
 	}
 }
 
+// @Summary Upload File
+// @Description Upload File
+// @Tags Files
+// @Accept multipart/form-data
+// @Accept  json
+// @Produce  json
+// @Security BearerAuth
+// @Param files formData file true "Files to upload"
+// @Param destination formData string true "Destination path"
+// @Success 200 {array} files.FileRes
+// @Router /files/upload [post]
 func (h *filesHandler) UploadFile(c fiber.Ctx) error {
 	req := make([]*files.FileReq, 0)
 
@@ -99,6 +110,15 @@ func (h *filesHandler) UploadFile(c fiber.Ctx) error {
 	return entities.NewResponse(c).Success(fiber.StatusCreated, res).Res()
 }
 
+// @Summary Delete File
+// @Description Delete File
+// @Tags Files
+// @Accept  json
+// @Produce  json
+// @Security BearerAuth
+// @Param request body files.DeleteFileReq true "Files to delete"
+// @Success 200 {array} nil
+// @Router /files/delete [delete]
 func (h *filesHandler) DeleteFile(c fiber.Ctx) error {
 	req := make([]*files.DeleteFileReq, 0)
 	if err := c.Bind().Body(&req); err != nil {

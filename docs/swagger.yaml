@@ -1,0 +1,804 @@
+basePath: /v1
+definitions:
+  appinfo.Category:
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+  appinfo.CategoryRemoveRes:
+    properties:
+      category_id:
+        type: integer
+    type: object
+  appinfo.GenerateApiKeyRes:
+    properties:
+      api_key:
+        type: string
+    type: object
+  entities.Image:
+    properties:
+      filename:
+        type: string
+      id:
+        type: string
+      url:
+        type: string
+    type: object
+  entities.PaginateRes:
+    properties:
+      data: {}
+      limit:
+        type: integer
+      page:
+        type: integer
+      total_item:
+        type: integer
+      total_page:
+        type: integer
+    type: object
+  files.DeleteFileReq:
+    properties:
+      destination:
+        type: string
+    type: object
+  files.FileRes:
+    properties:
+      filename:
+        type: string
+      url:
+        type: string
+    type: object
+  orders.Order:
+    properties:
+      address:
+        type: string
+      contact:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/orders.ProductsOrder'
+        type: array
+      status:
+        type: string
+      total_paid:
+        type: number
+      transfer_slip:
+        $ref: '#/definitions/orders.TransferSlip'
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  orders.OrderReq:
+    properties:
+      address:
+        type: string
+      contact:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/orders.ProductsOrder'
+        type: array
+      status:
+        type: string
+      transfer_slip:
+        $ref: '#/definitions/orders.TransferSlip'
+    type: object
+  orders.ProductsOrder:
+    properties:
+      id:
+        type: string
+      product:
+        $ref: '#/definitions/products.Product'
+      qty:
+        type: integer
+    type: object
+  orders.TransferSlip:
+    properties:
+      created_at:
+        type: string
+      filename:
+        type: string
+      id:
+        type: string
+      url:
+        type: string
+    type: object
+  products.Product:
+    properties:
+      category:
+        $ref: '#/definitions/appinfo.Category'
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/entities.Image'
+        type: array
+      price:
+        type: number
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  users.AdminTokenResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  users.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      role_id:
+        type: integer
+      username:
+        type: string
+    type: object
+  users.UserCredential:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  users.UserPassport:
+    properties:
+      token:
+        $ref: '#/definitions/users.UserToken'
+      user:
+        $ref: '#/definitions/users.User'
+    type: object
+  users.UserRefreshCredential:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  users.UserRegisterReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  users.UserRemoveCredential:
+    properties:
+      oauth_id:
+        type: string
+    type: object
+  users.UserToken:
+    properties:
+      access_token:
+        type: string
+      id:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: This is a sample swagger for Kawaii Shop
+  title: Swagger Kawaii Shop API 1.0
+  version: 1.0.0
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: HealthCheck
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: HealthCheck
+      tags:
+      - Monitor
+  /appinfo/apikey:
+    get:
+      consumes:
+      - application/json
+      description: Generate Api Key
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/appinfo.GenerateApiKeyRes'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Generate Api Key
+      tags:
+      - Appinfo
+  /appinfo/categories:
+    post:
+      consumes:
+      - application/json
+      description: Add Caregory
+      parameters:
+      - description: Category Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/appinfo.Category'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/appinfo.Category'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Add Caregory
+      tags:
+      - Categories
+  /appinfo/categories/{category_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete File
+      parameters:
+      - description: Category Id
+        in: path
+        name: category_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/appinfo.CategoryRemoveRes'
+      security:
+      - BearerAuth: []
+      summary: Delete File
+      tags:
+      - Files
+  /appinfo/categories/{title}:
+    get:
+      consumes:
+      - application/json
+      description: Find Categories
+      parameters:
+      - description: Title
+        in: path
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/appinfo.Category'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Find Categories
+      tags:
+      - Categories
+  /files/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete File
+      parameters:
+      - description: Files to delete
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/files.DeleteFileReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Delete File
+      tags:
+      - Files
+  /files/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      - application/json
+      description: Upload File
+      parameters:
+      - description: Files to upload
+        in: formData
+        name: files
+        required: true
+        type: file
+      - description: Destination path
+        in: formData
+        name: destination
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/files.FileRes'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Upload File
+      tags:
+      - Files
+  /orders:
+    get:
+      consumes:
+      - application/json
+      description: Find Orders
+      parameters:
+      - default: 1
+        description: Page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Limit
+        in: query
+        name: limit
+        type: integer
+      - default: id
+        description: Order By field
+        in: query
+        name: order_by
+        type: string
+      - default: desc
+        description: Sort By direction (asc or desc)
+        in: query
+        name: sort_by
+        type: string
+      - description: Search by user_id | address | contact
+        in: query
+        name: search
+        type: string
+      - description: Status
+        in: query
+        name: status
+        type: string
+      - description: Start Date (YYYY-MM-DD)
+        in: query
+        name: start_date
+        type: string
+      - description: End Date (YYYY-MM-DD)
+        in: query
+        name: end_date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.PaginateRes'
+      security:
+      - BearerAuth: []
+      summary: Find Orders
+      tags:
+      - Orders
+    post:
+      consumes:
+      - application/json
+      description: Insert Order
+      parameters:
+      - description: Order Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/orders.OrderReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/orders.Order'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Insert Order
+      tags:
+      - Orders
+  /orders/{user_id}/{order_id}:
+    get:
+      consumes:
+      - application/json
+      description: Find One Order
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: Order ID
+        in: path
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/orders.Order'
+      security:
+      - BearerAuth: []
+      summary: Find One Order
+      tags:
+      - Orders
+    patch:
+      consumes:
+      - application/json
+      description: Update Order
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        type: string
+      - description: Order ID
+        in: query
+        name: order_id
+        type: string
+      - description: Order Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/orders.OrderReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/orders.Order'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Update Order
+      tags:
+      - Orders
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Find Products
+      parameters:
+      - description: Id
+        in: query
+        name: id
+        type: string
+      - default: 1
+        description: Page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Limit
+        in: query
+        name: limit
+        type: integer
+      - default: id
+        description: Order By field
+        in: query
+        name: order_by
+        type: string
+      - default: desc
+        description: Sort By direction (asc or desc)
+        in: query
+        name: sort_by
+        type: string
+      - description: Search by title | description
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.PaginateRes'
+      summary: Find Products
+      tags:
+      - Products
+    patch:
+      consumes:
+      - application/json
+      description: Update Product
+      parameters:
+      - description: Product Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/products.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/products.Product'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Update Product
+      tags:
+      - Products
+    post:
+      consumes:
+      - application/json
+      description: Add Product
+      parameters:
+      - description: Product Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/products.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/products.Product'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Add Product
+      tags:
+      - Products
+  /products/{product_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Product
+      parameters:
+      - description: Product ID
+        in: query
+        name: product_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Delete Product
+      tags:
+      - Products
+    get:
+      consumes:
+      - application/json
+      description: Find One Product
+      parameters:
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/products.Product'
+      summary: Find One Product
+      tags:
+      - Products
+  /users/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get user profile
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/users.User'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get user profile
+      tags:
+      - Users
+  /users/admin/secret:
+    get:
+      consumes:
+      - application/json
+      description: Generate admin token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/users.AdminTokenResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Generate admin token
+      tags:
+      - Users
+  /users/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refresh customer token
+      parameters:
+      - description: User Refresh Credential
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/users.UserRefreshCredential'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/users.UserPassport'
+            type: array
+      summary: Refresh customer token
+      tags:
+      - Users
+  /users/signin:
+    post:
+      consumes:
+      - application/json
+      description: Customer sign in
+      parameters:
+      - description: User Credential
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/users.UserCredential'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/users.UserPassport'
+            type: array
+      summary: Customer sign in
+      tags:
+      - Users
+  /users/signout:
+    post:
+      consumes:
+      - application/json
+      description: Sign out
+      parameters:
+      - description: User Remove Credential
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/users.UserRemoveCredential'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+      summary: Sign out
+      tags:
+      - Users
+  /users/signup:
+    post:
+      consumes:
+      - application/json
+      description: Customer sign up
+      parameters:
+      - description: User Register Req
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/users.UserRegisterReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/users.UserPassport'
+            type: array
+      summary: Customer sign up
+      tags:
+      - Users
+  /users/signup-admin:
+    post:
+      consumes:
+      - application/json
+      description: Admin sign up
+      parameters:
+      - description: User Register Req
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/users.UserRegisterReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/users.UserPassport'
+            type: array
+      summary: Admin sign up
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and your JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

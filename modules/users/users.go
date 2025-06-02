@@ -33,6 +33,10 @@ type UserCredentialCheck struct {
 	RoleId   int    `db:"role_id"`
 }
 
+type AdminTokenResponse struct {
+    Token string `json:"token"`
+}
+
 func (obj *UserRegisterReq) BcryptHashing() error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(obj.Password), bcrypt.DefaultCost)
 	if err != nil {

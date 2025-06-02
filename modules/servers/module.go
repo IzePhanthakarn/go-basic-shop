@@ -1,6 +1,7 @@
 package servers
 
 import (
+	"github.com/Flussen/swagger-fiber-v3"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoUsecases"
@@ -29,6 +30,7 @@ type IModuleFactory interface {
 	FileModule()
 	ProductsModule()
 	OrderModule()
+	SwaggerModule()
 }
 
 type moduleFactory struct {
@@ -58,6 +60,9 @@ func (m *moduleFactory) MonitorModule() {
 	m.router.Get("/", handler.HealthCheck)
 }
 
+func (m *moduleFactory) SwaggerModule() {
+	m.router.Get("/swagger/*", swagger.HandlerDefault)
+}
 func (m *moduleFactory) UserModule() {
 	repository := usersRepositories.UsersRepository(m.server.db)
 	usecase := usersUsecases.UsersUsecase(m.server.cfg, repository)
@@ -65,10 +70,10 @@ func (m *moduleFactory) UserModule() {
 
 	router := m.router.Group("/users")
 
-	router.Post("/signup", handler.SignUpCustomer, m.middlewares.ApiKeyAuth())
-	router.Post("/signin", handler.SignIn, m.middlewares.ApiKeyAuth())
-	router.Post("/refresh", handler.RefreshPassport, m.middlewares.ApiKeyAuth())
-	router.Post("/signout", handler.SignOut, m.middlewares.ApiKeyAuth())
+	router.Post("/signup", handler.SignUpCustomer)
+	router.Post("/signin", handler.SignIn)
+	router.Post("/refresh", handler.RefreshPassport)
+	router.Post("/signout", handler.SignOut)
 	router.Post("/signup-admin", handler.SignUpAdmin, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
 
 	router.Get("/:user_id", handler.GetUserProfile, m.middlewares.JwtAuth(), m.middlewares.ParamsCheck())
@@ -107,8 +112,8 @@ func (m *moduleFactory) ProductsModule() {
 
 	router := m.router.Group("/products")
 
-	router.Get("/", productsHandler.FindProduct, m.middlewares.ApiKeyAuth())
-	router.Get("/:product_id", productsHandler.FindOneProduct, m.middlewares.ApiKeyAuth())
+	router.Get("/", productsHandler.FindProduct)
+	router.Get("/:product_id", productsHandler.FindOneProduct)
 
 	router.Post("/", productsHandler.AddProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
 	router.Patch("/:product_id", productsHandler.UpdateProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
@@ -130,6 +135,6 @@ func (m *moduleFactory) OrderModule() {
 
 	router.Get("/", ordersHandler.FindOrder, m.middlewares.JwtAuth())
 	router.Get("/:user_id/:order_id", ordersHandler.FindOneOrder, m.middlewares.JwtAuth(), m.middlewares.ParamsCheck())
-	
+
 	router.Patch("/:user_id/:order_id", ordersHandler.UpdateOrder, m.middlewares.JwtAuth(), m.middlewares.ParamsCheck())
 }
