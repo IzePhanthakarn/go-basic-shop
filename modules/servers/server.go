@@ -49,8 +49,8 @@ func (s *server) Start() {
 	modules.MonitorModule()
 	modules.UserModule()
 	modules.AppinfoModule()
-	modules.FileModule()
-	modules.ProductsModule()
+	modules.FileModule().Init()
+	modules.ProductsModule().Init()
 	modules.OrderModule()
 	modules.SwaggerModule()
 

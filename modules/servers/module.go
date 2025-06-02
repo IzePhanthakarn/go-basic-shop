@@ -5,7 +5,6 @@ import (
 	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoUsecases"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesUsecases"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresRepositories"
@@ -14,9 +13,7 @@ import (
 	"github.com/IzePhanthakarn/kawaii-shop/modules/orders/ordersHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/orders/ordersRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/orders/ordersUsecases"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsRepositories"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsUsecases"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/users/usersHandlers"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/users/usersRepositories"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/users/usersUsecases"
@@ -27,8 +24,8 @@ type IModuleFactory interface {
 	MonitorModule()
 	UserModule()
 	AppinfoModule()
-	FileModule()
-	ProductsModule()
+	FileModule() IFileModule
+	ProductsModule() IProductsModule
 	OrderModule()
 	SwaggerModule()
 }
@@ -92,33 +89,6 @@ func (m *moduleFactory) AppinfoModule() {
 
 	router.Get("/categories", handler.FindCategory)
 	router.Get("/apikey", handler.GenerateApiKey, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
-}
-
-func (m *moduleFactory) FileModule() {
-	usecase := filesUsecases.FileUsecase(m.server.cfg)
-	handler := filesHandlers.FilesHandler(m.server.cfg, usecase)
-	router := m.router.Group("/files")
-
-	router.Post("/upload", handler.UploadFile, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
-	router.Patch("/delete", handler.DeleteFile, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
-}
-
-func (m *moduleFactory) ProductsModule() {
-	filesUsecase := filesUsecases.FileUsecase(m.server.cfg)
-
-	productsRepository := productsRepositories.ProductsRepository(m.server.db, m.server.cfg, filesUsecase)
-	productsUsecase := productsUsecases.ProductsUsecase(productsRepository)
-	productsHandler := productsHandlers.ProductsHandler(m.server.cfg, filesUsecase, productsUsecase)
-
-	router := m.router.Group("/products")
-
-	router.Get("/", productsHandler.FindProduct)
-	router.Get("/:product_id", productsHandler.FindOneProduct)
-
-	router.Post("/", productsHandler.AddProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
-	router.Patch("/:product_id", productsHandler.UpdateProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
-
-	router.Delete("/:product_id", productsHandler.DeleteProduct, m.middlewares.JwtAuth(), m.middlewares.Authorize(2))
 }
 
 func (m *moduleFactory) OrderModule() {
