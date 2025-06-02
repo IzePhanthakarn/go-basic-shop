@@ -9,6 +9,7 @@ import (
 	"github.com/IzePhanthakarn/kawaii-shop/modules/orders"
 	"github.com/IzePhanthakarn/kawaii-shop/modules/orders/ordersUsecases"
 	"github.com/gofiber/fiber/v3"
+	"github.com/google/uuid"
 )
 
 type ordersHandlersErrCode string
@@ -17,12 +18,14 @@ const (
 	findOneOrderErr ordersHandlersErrCode = "orders-001"
 	findOrderErr    ordersHandlersErrCode = "orders-002"
 	insertOrderErr  ordersHandlersErrCode = "orders-003"
+	updateOrderErr  ordersHandlersErrCode = "orders-004"
 )
 
 type IOrdersHandler interface {
 	FindOneOrder(c fiber.Ctx) error
 	FindOrder(c fiber.Ctx) error
 	InsertOrder(c fiber.Ctx) error
+	UpdateOrder(c fiber.Ctx) error
 }
 
 type ordersHandlers struct {
@@ -155,6 +158,64 @@ func (h *ordersHandlers) InsertOrder(c fiber.Ctx) error {
 		return entities.NewResponse(c).Error(
 			fiber.StatusInternalServerError,
 			string(insertOrderErr),
+			err.Error(),
+		).Res()
+	}
+
+	return entities.NewResponse(c).Success(fiber.StatusOK, order).Res()
+}
+
+func (h *ordersHandlers) UpdateOrder(c fiber.Ctx) error {
+	orderId := strings.Trim(c.Params("order_id"), " ")
+	req := new(orders.Order)
+	if err := c.Bind().JSON(req); err != nil {
+		return entities.NewResponse(c).Error(
+			fiber.StatusBadRequest,
+			string(updateOrderErr),
+			err.Error(),
+		).Res()
+	}
+	req.Id = orderId
+
+	statusMap := map[string]string{
+		"waiting": "waiting",
+		"shipping": "shipping",
+		"completed": "completed",
+		"canceled":  "canceled",
+	}
+
+	if c.Locals("userRoleId").(int) != 2 {
+		req.UserId = strings.Trim(c.Locals("userId").(string), " ")
+	} else if strings.ToLower(req.Status) == statusMap["canceles"] {
+		req.Status = statusMap["canceled"]
+	}
+
+	if req.TransferSlip != nil {
+		if req.TransferSlip.Id == "" {
+			req.TransferSlip.Id = uuid.NewString()
+		}
+		if req.TransferSlip.CreatedAt == "" {
+			loc, err := time.LoadLocation("Asia/Bangkok")
+			if err != nil {
+				return entities.NewResponse(c).Error(
+					fiber.StatusInternalServerError,
+					string(updateOrderErr),
+					err.Error(),
+				).Res()
+			}
+			now := time.Now().In(loc)
+
+			// YYYY-MM-DD HH:MM:SS
+			// 2006-01-02 15:04:05
+			req.TransferSlip.CreatedAt = now.Format("2006-01-02 15:04:05")
+		}
+	}
+
+	order, err := h.orderUsecase.UpdateOrder(req)
+	if err != nil {
+		return entities.NewResponse(c).Error(
+			fiber.StatusInternalServerError,
+			string(updateOrderErr),
 			err.Error(),
 		).Res()
 	}
