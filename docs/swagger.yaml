@@ -192,8 +192,8 @@ definitions:
 host: localhost:3000
 info:
   contact: {}
-  description: This is a sample swagger for Kawaii Shop
-  title: Swagger Kawaii Shop API 1.0
+  description: This is a sample swagger for Basic Shop
+  title: Swagger Basic Shop API 1.0
   version: 1.0.0
 paths:
   /:

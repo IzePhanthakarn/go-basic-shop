@@ -1,8 +1,8 @@
 package products
 
 import (
-	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/appinfo"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
 )
 
 type Product struct {

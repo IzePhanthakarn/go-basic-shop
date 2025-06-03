@@ -1,7 +1,7 @@
 package entities
 
 import (
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/kawaiilogger"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/logger"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -33,7 +33,7 @@ func NewResponse(c fiber.Ctx) *Response {
 func (r *Response) Success(code int, data any) IResponse {
 	r.StatusCode = code
 	r.Data = data
-	kawaiilogger.InitKawaiiLogger(r.Context, &r.Data).Print().Save()
+	logger.InitLogger(r.Context, &r.Data).Print().Save()
 	return r
 }
 
@@ -45,7 +45,7 @@ func (r *Response) Error(code int, traceId, msg string) IResponse {
 	}
 
 	r.IsError = true
-	kawaiilogger.InitKawaiiLogger(r.Context, &r.ErrorRes).Print().Save()
+	logger.InitLogger(r.Context, &r.ErrorRes).Print().Save()
 	return r
 }
 

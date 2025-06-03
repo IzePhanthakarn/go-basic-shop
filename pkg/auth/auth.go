@@ -1,4 +1,4 @@
-package kawaiiauth
+package auth
 
 import (
 	"errors"
@@ -6,8 +6,8 @@ import (
 	"math"
 	"time"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/users"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/users"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -20,33 +20,33 @@ const (
 	ApiKey  TokenType = "apikey"
 )
 
-type kawaiiAuth struct {
-	mapClaims *kawaiiMapClaims
+type basicAuth struct {
+	mapClaims *basicMapClaims
 	cfg       config.IJwtConfig
 }
 
-type kawaiiAdmin struct {
-	*kawaiiAuth
+type basicAdmin struct {
+	*basicAuth
 }
 
-type kawaiiApiKey struct {
-	*kawaiiAuth
+type basicApiKey struct {
+	*basicAuth
 }
 
-type kawaiiMapClaims struct {
+type basicMapClaims struct {
 	Claims *users.UserClaims `json:"claims"`
 	jwt.RegisteredClaims
 }
 
-type IKawaiiAuth interface {
+type IAuthToken interface {
 	SignToken() string
 }
 
-type IKawaiiAdmin interface {
+type IAdminToken interface {
 	SignToken() string
 }
 
-type IKawaiiApiKey interface {
+type IApiKey interface {
 	SignToken() string
 }
 
@@ -58,29 +58,29 @@ func jwtTimeRepeatAdapter(t int64) *jwt.NumericDate {
 	return jwt.NewNumericDate(time.Unix(t, 0))
 }
 
-func (a *kawaiiAuth) SignToken() string {
+func (a *basicAuth) SignToken() string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, a.mapClaims)
 	tokenString, _ := token.SignedString(a.cfg.SecretKey())
 
 	return tokenString
 }
 
-func (a *kawaiiAdmin) SignToken() string {
+func (a *basicAdmin) SignToken() string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, a.mapClaims)
 	tokenString, _ := token.SignedString(a.cfg.AdminKey())
 
 	return tokenString
 }
 
-func (a *kawaiiApiKey) SignToken() string {
+func (a *basicApiKey) SignToken() string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, a.mapClaims)
 	tokenString, _ := token.SignedString(a.cfg.ApiKey())
 
 	return tokenString
 }
 
-func ParseToken(cfg config.IJwtConfig, tokenString string) (*kawaiiMapClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &kawaiiMapClaims{}, func(t *jwt.Token) (interface{}, error) {
+func ParseToken(cfg config.IJwtConfig, tokenString string) (*basicMapClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &basicMapClaims{}, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 		}
@@ -95,15 +95,15 @@ func ParseToken(cfg config.IJwtConfig, tokenString string) (*kawaiiMapClaims, er
 			return nil, fmt.Errorf("failed to parse token: %w", err)
 		}
 	}
-	if claims, ok := token.Claims.(*kawaiiMapClaims); ok {
+	if claims, ok := token.Claims.(*basicMapClaims); ok {
 		return claims, nil
 	} else {
 		return nil, fmt.Errorf("failed to parse token: %w", err)
 	}
 }
 
-func ParseAdminToken(cfg config.IJwtConfig, tokenString string) (*kawaiiMapClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &kawaiiMapClaims{}, func(t *jwt.Token) (interface{}, error) {
+func ParseAdminToken(cfg config.IJwtConfig, tokenString string) (*basicMapClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &basicMapClaims{}, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 		}
@@ -118,15 +118,15 @@ func ParseAdminToken(cfg config.IJwtConfig, tokenString string) (*kawaiiMapClaim
 			return nil, fmt.Errorf("failed to parse token: %w", err)
 		}
 	}
-	if claims, ok := token.Claims.(*kawaiiMapClaims); ok {
+	if claims, ok := token.Claims.(*basicMapClaims); ok {
 		return claims, nil
 	} else {
 		return nil, fmt.Errorf("failed to parse token: %w", err)
 	}
 }
 
-func ParseApiKey(cfg config.IJwtConfig, tokenString string) (*kawaiiMapClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &kawaiiMapClaims{}, func(t *jwt.Token) (interface{}, error) {
+func ParseApiKey(cfg config.IJwtConfig, tokenString string) (*basicMapClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &basicMapClaims{}, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 		}
@@ -141,7 +141,7 @@ func ParseApiKey(cfg config.IJwtConfig, tokenString string) (*kawaiiMapClaims, e
 			return nil, fmt.Errorf("failed to parse token: %w", err)
 		}
 	}
-	if claims, ok := token.Claims.(*kawaiiMapClaims); ok {
+	if claims, ok := token.Claims.(*basicMapClaims); ok {
 		return claims, nil
 	} else {
 		return nil, fmt.Errorf("failed to parse token: %w", err)
@@ -149,12 +149,12 @@ func ParseApiKey(cfg config.IJwtConfig, tokenString string) (*kawaiiMapClaims, e
 }
 
 func RepeatToken(cfg config.IJwtConfig, claims *users.UserClaims, exp int64) string {
-	obj := &kawaiiAuth{
+	obj := &basicAuth{
 		cfg: cfg,
-		mapClaims: &kawaiiMapClaims{
+		mapClaims: &basicMapClaims{
 			Claims: claims,
 			RegisteredClaims: jwt.RegisteredClaims{
-				Issuer:    "kawaiishop-api",
+				Issuer:    "basicshop-api",
 				Subject:   "refresh-token",
 				Audience:  []string{"customer", "admin"},
 				ExpiresAt: jwtTimeRepeatAdapter(exp),
@@ -166,7 +166,7 @@ func RepeatToken(cfg config.IJwtConfig, claims *users.UserClaims, exp int64) str
 	return obj.SignToken()
 }
 
-func NewKawaiiAuth(tokenType TokenType, cfg config.IJwtConfig, claims *users.UserClaims) (IKawaiiAuth, error) {
+func NewAuth(tokenType TokenType, cfg config.IJwtConfig, claims *users.UserClaims) (IAuthToken, error) {
 	switch tokenType {
 	case Access:
 		return newAccessToken(cfg, claims), nil
@@ -181,13 +181,13 @@ func NewKawaiiAuth(tokenType TokenType, cfg config.IJwtConfig, claims *users.Use
 	}
 }
 
-func newAccessToken(cfg config.IJwtConfig, claims *users.UserClaims) IKawaiiAuth {
-	return &kawaiiAuth{
+func newAccessToken(cfg config.IJwtConfig, claims *users.UserClaims) IAuthToken {
+	return &basicAuth{
 		cfg: cfg,
-		mapClaims: &kawaiiMapClaims{
+		mapClaims: &basicMapClaims{
 			Claims: claims,
 			RegisteredClaims: jwt.RegisteredClaims{
-				Issuer:    "kawaiishop-api",
+				Issuer:    "basicshop-api",
 				Subject:   "access-token",
 				Audience:  []string{"customer", "admin"},
 				ExpiresAt: jwtTimeDurationCal(cfg.AccessExpiresAt()),
@@ -198,13 +198,13 @@ func newAccessToken(cfg config.IJwtConfig, claims *users.UserClaims) IKawaiiAuth
 	}
 }
 
-func newRefreshToken(cfg config.IJwtConfig, claims *users.UserClaims) IKawaiiAuth {
-	return &kawaiiAuth{
+func newRefreshToken(cfg config.IJwtConfig, claims *users.UserClaims) IAuthToken {
+	return &basicAuth{
 		cfg: cfg,
-		mapClaims: &kawaiiMapClaims{
+		mapClaims: &basicMapClaims{
 			Claims: claims,
 			RegisteredClaims: jwt.RegisteredClaims{
-				Issuer:    "kawaiishop-api",
+				Issuer:    "basicshop-api",
 				Subject:   "refresh-token",
 				Audience:  []string{"customer", "admin"},
 				ExpiresAt: jwtTimeDurationCal(cfg.RefreshExpiresAt()),
@@ -215,14 +215,14 @@ func newRefreshToken(cfg config.IJwtConfig, claims *users.UserClaims) IKawaiiAut
 	}
 }
 
-func newAdminToken(cfg config.IJwtConfig) IKawaiiAuth {
-	return &kawaiiAdmin{
-		kawaiiAuth: &kawaiiAuth{
+func newAdminToken(cfg config.IJwtConfig) IAuthToken {
+	return &basicAdmin{
+		basicAuth: &basicAuth{
 			cfg: cfg,
-			mapClaims: &kawaiiMapClaims{
+			mapClaims: &basicMapClaims{
 				Claims: nil,
 				RegisteredClaims: jwt.RegisteredClaims{
-					Issuer:    "kawaiishop-api",
+					Issuer:    "basicshop-api",
 					Subject:   "admin-token",
 					Audience:  []string{"admin"},
 					ExpiresAt: jwtTimeDurationCal(300),
@@ -234,14 +234,14 @@ func newAdminToken(cfg config.IJwtConfig) IKawaiiAuth {
 	}
 }
 
-func newApiKey(cfg config.IJwtConfig) IKawaiiAuth {
-	return &kawaiiApiKey{
-		kawaiiAuth: &kawaiiAuth{
+func newApiKey(cfg config.IJwtConfig) IAuthToken {
+	return &basicApiKey{
+		basicAuth: &basicAuth{
 			cfg: cfg,
-			mapClaims: &kawaiiMapClaims{
+			mapClaims: &basicMapClaims{
 				Claims: nil,
 				RegisteredClaims: jwt.RegisteredClaims{
-					Issuer:    "kawaiishop-api",
+					Issuer:    "basicshop-api",
 					Subject:   "api-key",
 					Audience:  []string{"admin", "customer"},
 					ExpiresAt: jwt.NewNumericDate(time.Now().AddDate(2, 0, 0)),

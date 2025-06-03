@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesUsecases"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsPatterns"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files/filesUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products/productsPatterns"
 	"github.com/jmoiron/sqlx"
 )
 

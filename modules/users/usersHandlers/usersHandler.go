@@ -3,11 +3,11 @@ package usersHandlers
 import (
 	"strings"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/users"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/users/usersUsecases"
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/kawaiiauth"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/users"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/users/usersUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/auth"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -168,8 +168,8 @@ func (h *userHandler) SignUpAdmin(c fiber.Ctx) error {
 // @Success 200 {array} users.AdminTokenResponse
 // @Router /users/admin/secret [get]
 func (h *userHandler) GenerateAdminToken(c fiber.Ctx) error {
-	adminToken, err := kawaiiauth.NewKawaiiAuth(
-		kawaiiauth.Admin,
+	adminToken, err := auth.NewAuth(
+		auth.Admin,
 		h.cfg.Jwt(),
 		nil,
 	)

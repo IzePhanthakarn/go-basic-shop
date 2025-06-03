@@ -3,7 +3,7 @@ package databases
 import (
 	"log"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 )

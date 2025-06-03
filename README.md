@@ -1,5 +1,5 @@
-<h1>Kawaii Shop</h1>
-Kawaii shop is a mini REST API e-commerce project that made by Golang
+<h1>Basic Shop</h1>
+Basic shop is a mini REST API e-commerce project that made by Golang
 
 <h2>Required</h2>
 <ul>
@@ -16,15 +16,15 @@ Kawaii shop is a mini REST API e-commerce project that made by Golang
 <h2>Start PostgreSQLon Docker 🐋</h2>
 
 ```bash
-docker run --name kawaii_db_test -e POSTGRES_USER=kawaii -e POSTGRES_PASSWORD=123456 -p 4444:5432 -d postgres:alpine
+docker run --name basic_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=123456 -p 5432:5432 -d postgres:alpine
 ```
 
 <h2>Execute a container and CREATE a new database</h2>
 
 ```bash
-docker exec -it kawaii_db_test bash
-psql -U kawaii
-CREATE DATABASE kawaii_db_test;
+docker exec -it basic_db bash
+psql -U postgres
+CREATE DATABASE basic_db;
 \l
 ```
 
@@ -32,10 +32,10 @@ CREATE DATABASE kawaii_db_test;
 
 ```bash
 # Migrate up
-migrate -database 'postgres://kawaii:123456@0.0.0.0:4444/kawaii_db_test?sslmode=disable' -source file://D:/path-to-migrate -verbose up
+migrate -database 'postgresql://postgres:123456@0.0.0.0:5432/basic_db?sslmode=disable' -source file://D:/path-to-migrate -verbose up
 
 # Migrate down
-migrate -database 'postgres://kawaii:123456@0.0.0.0:4444/kawaii_db_test?sslmode=disable' -source file://D:/path-to-migrate -verbose down
+migrate -database 'postgresql://postgres:123456@0.0.0.0:5432/basic_db?sslmode=disable' -source file://D:/path-to-migrate -verbose down
 ```
 
 <h2>Build and Push to GCP</h2>

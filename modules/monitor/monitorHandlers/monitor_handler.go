@@ -1,9 +1,9 @@
 package monitorHandlers
 
 import (
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/monitor"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/monitor"
 	fiber "github.com/gofiber/fiber/v3"
 )
 

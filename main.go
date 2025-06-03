@@ -3,16 +3,16 @@ package main
 import (
 	"os"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/servers"
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/databases"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/servers"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/databases"
 
-	_ "github.com/IzePhanthakarn/kawaii-shop/docs"
+	_ "github.com/IzePhanthakarn/go-basic-shop/docs"
 )
 
-// @title Swagger Kawaii Shop API 1.0
+// @title Swagger Basic Shop API 1.0
 // @version 1.0.0
-// @description This is a sample swagger for Kawaii Shop 
+// @description This is a sample swagger for Basic Shop
 // @host localhost:3000
 // @BasePath /v1
 // @securityDefinitions.apikey BearerAuth

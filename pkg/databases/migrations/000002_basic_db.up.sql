@@ -14,8 +14,8 @@ INSERT INTO "users" (
     "role_id"
 )
 VALUES
-    ('customer001', 'customer001@kawaii.com', '$2a$10$8KzaNdKIMyOkASCH4QvSKuEMIY7Jc3vcHDuSJvXLii1rvBNgz60a6', 1),
-    ('admin001', 'admin001@kawaii.com', '$2a$10$3qqNPE.TJpNGYCohjTgw9.v1z0ckovx95AmiEtUXcixGAgfW7.wCi', 2);
+    ('customer001', 'customer001@basic.com', '$2a$10$8KzaNdKIMyOkASCH4QvSKuEMIY7Jc3vcHDuSJvXLii1rvBNgz60a6', 1),
+    ('admin001', 'admin001@basic.com', '$2a$10$3qqNPE.TJpNGYCohjTgw9.v1z0ckovx95AmiEtUXcixGAgfW7.wCi', 2);
 
 
 INSERT INTO "categories"
@@ -91,8 +91,8 @@ INSERT INTO "orders"
         "status"
     )
 VALUES
-    ('U000002', 'kawaii customer', '(330) 546-7713 5180 Richville Dr SW Navarre, Ohio(OH), 44662', '{"id":"4bd7a0f5-c41f-4c1a-a997-0d965352fbb2","filename":"slip.jpg","url":"https://i.pinimg.com/564x/a8/d4/f5/a8d4f5a620d22128c2b6d1a42c847560.jpg","created_at":"2023-03-01 23:21:00"}'::jsonb, 'completed'),
-    ('U000002', 'kawaii customer', '(410) 256-8192 2260 Brimstone Pl Hanover, Maryland(MD), 21076', NULL, 'waiting');
+    ('U000002', 'basic customer', '(330) 546-7713 5180 Richville Dr SW Navarre, Ohio(OH), 44662', '{"id":"4bd7a0f5-c41f-4c1a-a997-0d965352fbb2","filename":"slip.jpg","url":"https://i.pinimg.com/564x/a8/d4/f5/a8d4f5a620d22128c2b6d1a42c847560.jpg","created_at":"2023-03-01 23:21:00"}'::jsonb, 'completed'),
+    ('U000002', 'basic customer', '(410) 256-8192 2260 Brimstone Pl Hanover, Maryland(MD), 21076', NULL, 'waiting');
 
 INSERT INTO "products_orders"
     (

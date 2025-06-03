@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
 	"github.com/gofiber/fiber/v3"
 	"github.com/jmoiron/sqlx"
 )

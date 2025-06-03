@@ -1,4 +1,4 @@
-module github.com/IzePhanthakarn/kawaii-shop
+module github.com/IzePhanthakarn/go-basic-shop
 
 go 1.24.2
 

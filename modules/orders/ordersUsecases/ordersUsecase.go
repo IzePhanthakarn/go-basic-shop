@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/orders"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/orders/ordersRepositories"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsRepositories"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/orders"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/orders/ordersRepositories"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products/productsRepositories"
 )
 
 type IOrdersUsecase interface {
@@ -59,17 +59,17 @@ func (u *ordersUsecase) InsertOrder(req *orders.Order) (*orders.Order, error) {
 		if err != nil {
 			return nil, err
 		}
-		
+
 		// Set price
 		req.TotalPaid += req.Products[i].Product.Price * float64(req.Products[i].Qty)
 		req.Products[i].Product = product
 	}
-	
+
 	orderId, err := u.ordersRepository.InsertOrder(req)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	order, err := u.ordersRepository.FindOneOrder(orderId)
 	if err != nil {
 		return nil, err

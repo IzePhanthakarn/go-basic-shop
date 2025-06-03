@@ -1,8 +1,8 @@
 package servers
 
 import (
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesHandlers"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files/filesHandlers"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files/filesUsecases"
 )
 
 type IFileModule interface {

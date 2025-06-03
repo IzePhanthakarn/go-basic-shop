@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/IzePhanthakarn/kawaii-shop/modules/orders"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/orders"
 	"github.com/jmoiron/sqlx"
 	"golang.org/x/net/context"
 )

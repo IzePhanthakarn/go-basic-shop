@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesUsecases"
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/utils"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files/filesUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/utils"
 	"github.com/gofiber/fiber/v3"
 )
 

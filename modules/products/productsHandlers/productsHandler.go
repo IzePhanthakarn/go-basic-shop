@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesUsecases"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/appinfo"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files/filesUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products/productsUsecases"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -241,6 +241,6 @@ func (h *productsHandler) DeleteProduct(c fiber.Ctx) error {
 			err.Error(),
 		).Res()
 	}
-	
+
 	return entities.NewResponse(c).Success(fiber.StatusOK, nil).Res()
 }

@@ -3,11 +3,11 @@ package myTests
 import (
 	"encoding/json"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/servers"
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/databases"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/servers"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/databases"
 
-	_ "github.com/IzePhanthakarn/kawaii-shop/docs"
+	_ "github.com/IzePhanthakarn/go-basic-shop/docs"
 )
 
 func SetupTest() servers.IModuleFactory {

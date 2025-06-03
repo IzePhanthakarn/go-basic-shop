@@ -1,8 +1,8 @@
 package appinfoUsecases
 
 import (
-	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoRepositories"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/appinfo"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/appinfo/appinfoRepositories"
 )
 
 type IAppinfoUsecase interface {

@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/IzePhanthakarn/kawaii-shop/modules/orders"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/orders/ordersPatterns"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/orders"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/orders/ordersPatterns"
 	"github.com/jmoiron/sqlx"
 )
 

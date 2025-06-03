@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/appinfo"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -72,7 +72,7 @@ func (r *appinfoRepository) InsertCategory(req []*appinfo.Category) error {
 
 	query += ` RETURNING "id";`
 
-	rows,err := tx.QueryxContext(ctx, query, valuesStack...)
+	rows, err := tx.QueryxContext(ctx, query, valuesStack...)
 	if err != nil {
 		tx.Rollback()
 		return fmt.Errorf("failed to insert category: %w", err)
@@ -85,7 +85,7 @@ func (r *appinfoRepository) InsertCategory(req []*appinfo.Category) error {
 			tx.Rollback()
 			return fmt.Errorf("failed to insert category: %w", err)
 		}
-		index ++
+		index++
 	}
 
 	if err := tx.Commit(); err != nil {

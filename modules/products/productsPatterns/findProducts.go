@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products"
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/utils"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/utils"
 	"github.com/jmoiron/sqlx"
 )
 

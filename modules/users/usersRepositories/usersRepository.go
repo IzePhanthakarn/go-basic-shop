@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/IzePhanthakarn/kawaii-shop/modules/users"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/users/usersPatterns"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/users"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/users/usersPatterns"
 	"github.com/jmoiron/sqlx"
 )
 

@@ -4,11 +4,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/appinfo/appinfoUsecases"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/kawaiiauth"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/appinfo"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/appinfo/appinfoUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/auth"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -49,8 +49,8 @@ func AppinfoHandler(cfg config.IConfig, appinfoUsecases appinfoUsecases.IAppinfo
 // @Success 200 {array} appinfo.GenerateApiKeyRes
 // @Router /appinfo/apikey [get]
 func (h *appinfoHandler) GenerateApiKey(c fiber.Ctx) error {
-	apiKey, err := kawaiiauth.NewKawaiiAuth(
-		kawaiiauth.ApiKey,
+	apiKey, err := auth.NewAuth(
+		auth.ApiKey,
 		h.cfg.Jwt(),
 		nil,
 	)

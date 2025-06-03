@@ -1,15 +1,15 @@
 package orders
 
 import (
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products"
 )
 
 type OrderFilter struct {
-	Search string `query:"search"` // Search by user_id, address, contact
-	Status string `query:"status"`
+	Search    string `query:"search"` // Search by user_id, address, contact
+	Status    string `query:"status"`
 	StartDate string `query:"start_date"`
-	EndDate string `query:"end_date"`
+	EndDate   string `query:"end_date"`
 	*entities.PaginationReq
 	*entities.SortReq
 }
@@ -28,11 +28,11 @@ type Order struct {
 }
 
 type OrderReq struct {
-	Products     []*ProductsOrder  `json:"products"`
-	Address      string            `json:"address"`
-	Contact      string            `json:"contact"`
-	Status       string            `json:"status"`
-	TransferSlip *TransferSlip     `json:"transfer_slip"`
+	Products     []*ProductsOrder `json:"products"`
+	Address      string           `json:"address"`
+	Contact      string           `json:"contact"`
+	Status       string           `json:"status"`
+	TransferSlip *TransferSlip    `json:"transfer_slip"`
 }
 
 type TransferSlip struct {

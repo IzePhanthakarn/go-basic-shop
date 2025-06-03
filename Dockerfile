@@ -14,6 +14,6 @@ COPY --from=build /bin/app /bin
 COPY .env.prod /bin
 # COPY /assets /bin/assets
 
-EXPOSE 3000
+EXPOSE 8080
 
 ENTRYPOINT [ "/bin/app", "/bin/.env.prod" ]

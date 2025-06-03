@@ -3,11 +3,11 @@ package middlewaresHandlers
 import (
 	"strings"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares/middlewaresUsecases"
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/kawaiiauth"
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/utils"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/middlewares/middlewaresUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/auth"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/utils"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
 	"github.com/gofiber/fiber/v3/middleware/logger"
@@ -78,7 +78,7 @@ func (h *middlewaresHandler) Logger() fiber.Handler {
 func (h *middlewaresHandler) JwtAuth() fiber.Handler {
 	return func(c fiber.Ctx) error {
 		token := strings.TrimPrefix(c.Get("Authorization"), "Bearer ")
-		result, err := kawaiiauth.ParseToken(h.cfg.Jwt(), token)
+		result, err := auth.ParseToken(h.cfg.Jwt(), token)
 		if err != nil {
 			return entities.NewResponse(c).Error(
 				fiber.StatusUnauthorized,
@@ -166,7 +166,7 @@ func (h *middlewaresHandler) Authorize(expectRoleId ...int) fiber.Handler {
 func (h *middlewaresHandler) ApiKeyAuth() fiber.Handler {
 	return func(c fiber.Ctx) error {
 		key := c.Get("x-api-key")
-		if _, err := kawaiiauth.ParseApiKey(h.cfg.Jwt(), key); err != nil {
+		if _, err := auth.ParseApiKey(h.cfg.Jwt(), key); err != nil {
 			return entities.NewResponse(c).Error(
 				fiber.StatusUnauthorized,
 				string(apiKeyAuthErr),

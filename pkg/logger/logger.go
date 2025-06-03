@@ -1,4 +1,4 @@
-package kawaiilogger
+package logger
 
 import (
 	"encoding/json"
@@ -8,19 +8,19 @@ import (
 	"strings"
 	"time"
 
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/utils"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
-type IKawaiiLogger interface {
-	Print() IKawaiiLogger
+type ILogger interface {
+	Print() ILogger
 	Save()
 	SetQuery(c fiber.Ctx)
 	SetBody(c fiber.Ctx)
 	SetResponse(res any)
 }
 
-type kawaiilogger struct {
+type basiclogger struct {
 	Time       string `json:"time"`
 	Ip         string `json:"ip"`
 	Method     string `json:"method"`
@@ -31,8 +31,8 @@ type kawaiilogger struct {
 	Response   any    `json:"response"`
 }
 
-func InitKawaiiLogger(c fiber.Ctx, res any) IKawaiiLogger {
-	log := &kawaiilogger{
+func InitLogger(c fiber.Ctx, res any) ILogger {
+	log := &basiclogger{
 		Time:       time.Now().Local().Format("2006-01-02 15:04:05"),
 		Ip:         c.IP(),
 		Method:     c.Method(),
@@ -45,14 +45,14 @@ func InitKawaiiLogger(c fiber.Ctx, res any) IKawaiiLogger {
 	return log
 }
 
-func (l *kawaiilogger) Print() IKawaiiLogger {
+func (l *basiclogger) Print() ILogger {
 	utils.Debug(l)
 	return l
 }
 
-func (l *kawaiilogger) Save() {
+func (l *basiclogger) Save() {
 	data := utils.Output(l)
-	filename := fmt.Sprintf("./assets/logs/kawaiilogger_%v.txt", strings.ReplaceAll(time.Now().Local().Format("2006-01-02"), "-", ""))
+	filename := fmt.Sprintf("./assets/logs/basiclogger_%v.txt", strings.ReplaceAll(time.Now().Local().Format("2006-01-02"), "-", ""))
 	file, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
@@ -61,7 +61,7 @@ func (l *kawaiilogger) Save() {
 	file.WriteString(string(data) + "\n")
 }
 
-func (l *kawaiilogger) SetQuery(c fiber.Ctx) {
+func (l *basiclogger) SetQuery(c fiber.Ctx) {
 	queryMap := c.Queries()
 	if queryMap == nil {
 		queryMap = make(map[string]string)
@@ -69,7 +69,7 @@ func (l *kawaiilogger) SetQuery(c fiber.Ctx) {
 	l.Query = queryMap
 }
 
-func (l *kawaiilogger) SetBody(c fiber.Ctx) {
+func (l *basiclogger) SetBody(c fiber.Ctx) {
 	rawBody := c.Body()
 
 	// เช็คว่า body มีข้อมูลก่อน
@@ -93,6 +93,6 @@ func (l *kawaiilogger) SetBody(c fiber.Ctx) {
 	}
 }
 
-func (l *kawaiilogger) SetResponse(res any) {
+func (l *basiclogger) SetResponse(res any) {
 	l.Response = res
 }

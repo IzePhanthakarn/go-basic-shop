@@ -10,8 +10,8 @@ import (
 	"cloud.google.com/go/iam"
 	"cloud.google.com/go/iam/apiv1/iampb"
 	"cloud.google.com/go/storage"
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files"
 )
 
 type IFilesUsecase interface {

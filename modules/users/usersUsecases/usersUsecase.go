@@ -3,10 +3,10 @@ package usersUsecases
 import (
 	"fmt"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/users"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/users/usersRepositories"
-	"github.com/IzePhanthakarn/kawaii-shop/pkg/kawaiiauth"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/users"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/users/usersRepositories"
+	"github.com/IzePhanthakarn/go-basic-shop/pkg/auth"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -73,14 +73,14 @@ func (u *usersUsecase) GetPassport(req *users.UserCredential) (*users.UserPasspo
 	}
 
 	// Sign token
-	accessToken, err := kawaiiauth.NewKawaiiAuth(kawaiiauth.Access, u.cfg.Jwt(), &users.UserClaims{
+	accessToken, err := auth.NewAuth(auth.Access, u.cfg.Jwt(), &users.UserClaims{
 		Id:     user.Id,
 		RoleId: user.RoleId,
 	})
 	if err != nil {
 		return nil, err
 	}
-	refreshToken, err := kawaiiauth.NewKawaiiAuth(kawaiiauth.Refresh, u.cfg.Jwt(), &users.UserClaims{
+	refreshToken, err := auth.NewAuth(auth.Refresh, u.cfg.Jwt(), &users.UserClaims{
 		Id:     user.Id,
 		RoleId: user.RoleId,
 	})
@@ -112,7 +112,7 @@ func (u *usersUsecase) GetPassport(req *users.UserCredential) (*users.UserPasspo
 
 func (u *usersUsecase) RefreshPassport(req *users.UserRefreshCredential) (*users.UserPassport, error) {
 	// Parse token
-	claims, err := kawaiiauth.ParseToken(u.cfg.Jwt(), req.RefreshToken)
+	claims, err := auth.ParseToken(u.cfg.Jwt(), req.RefreshToken)
 	if err != nil {
 		return nil, err
 	}
@@ -135,12 +135,12 @@ func (u *usersUsecase) RefreshPassport(req *users.UserRefreshCredential) (*users
 	}
 
 	// Sign token
-	accessToken, err := kawaiiauth.NewKawaiiAuth(kawaiiauth.Access, u.cfg.Jwt(), newClaims)
+	accessToken, err := auth.NewAuth(auth.Access, u.cfg.Jwt(), newClaims)
 	if err != nil {
 		return nil, err
 	}
 
-	refreshToken := kawaiiauth.RepeatToken(
+	refreshToken := auth.RepeatToken(
 		u.cfg.Jwt(),
 		newClaims,
 		claims.ExpiresAt.Unix(),

@@ -4,10 +4,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/IzePhanthakarn/kawaii-shop/config"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/orders"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/orders/ordersUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/config"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/orders"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/orders/ordersUsecases"
 	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
 )
@@ -224,8 +224,8 @@ func (h *ordersHandlers) UpdateOrder(c fiber.Ctx) error {
 	req.Id = orderId
 
 	statusMap := map[string]string{
-		"waiting": "waiting",
-		"shipping": "shipping",
+		"waiting":   "waiting",
+		"shipping":  "shipping",
 		"completed": "completed",
 		"canceled":  "canceled",
 	}

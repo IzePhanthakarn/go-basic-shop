@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/IzePhanthakarn/kawaii-shop/modules/users"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/users"
 	"github.com/jmoiron/sqlx"
 )
 

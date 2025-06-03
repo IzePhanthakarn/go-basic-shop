@@ -1,10 +1,10 @@
 package servers
 
 import (
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesUsecases"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsHandlers"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsRepositories"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products/productsUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files/filesUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products/productsHandlers"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products/productsRepositories"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products/productsUsecases"
 )
 
 type IProductsModule interface {

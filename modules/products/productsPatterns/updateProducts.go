@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/IzePhanthakarn/kawaii-shop/modules/entities"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/files/filesUsecases"
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/entities"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/files/filesUsecases"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products"
 	"github.com/jmoiron/sqlx"
 )
 

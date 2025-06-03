@@ -3,7 +3,7 @@ package middlewaresRepositories
 import (
 	"fmt"
 
-	"github.com/IzePhanthakarn/kawaii-shop/modules/middlewares"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/middlewares"
 	"github.com/jmoiron/sqlx"
 )
 

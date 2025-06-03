@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/IzePhanthakarn/kawaii-shop/modules/products"
+	"github.com/IzePhanthakarn/go-basic-shop/modules/products"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -128,7 +128,7 @@ func (b *insertProductBuilder) insertAttachment() error {
 		}
 		index += 3
 	}
-	
+
 	if _, err := b.tx.ExecContext(
 		ctx,
 		query,
@@ -179,6 +179,6 @@ func (en *insertProductEngineer) InsertProduct() (string, error) {
 	if err := en.builder.commit(); err != nil {
 		return "", err
 	}
-	
+
 	return en.builder.getProductId(), nil
 }
